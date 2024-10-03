@@ -1,10 +1,9 @@
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import pageObjects.BookStorePage;
 import pageObjects.LoginPage;
 import testBase.BaseSetup;
+import testBase.ReadProperties;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -12,61 +11,45 @@ public class TestRunner extends BaseSetup {
 
     private LoginPage loginPage;
     private BookStorePage bookStorePage;
-    private Properties properties;
+
+    static Properties properties;
 
     public TestRunner() {
-        properties = new Properties();
+        ReadProperties readPropertyFile = new ReadProperties();
         try {
-            // Load the properties file from src/test/resources
-            FileInputStream fis = new FileInputStream("src/test/resources/parameters.properties");
-            properties.load(fis);
-            fis.close();
+            properties = readPropertyFile.loadProperties();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to load properties file", e);
         }
     }
 
     @Test(priority = 1)
     public void loginPage(){
+
         String username = properties.getProperty("login.username");
         String password = properties.getProperty("login.password");
 
-        loginPage = new LoginPage(driver);
-        loginPage.login(username,password);
-
         try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            loginPage = new LoginPage(driver);
+            loginPage.login(username, password);
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Exception : " + e);
         }
     }
 
     @Test(priority = 2)
     public void bookStorePage(){
 
+        try {
+
         bookStorePage = new BookStorePage(driver);
 
         bookStorePage.clickBookStoreManuButton();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        bookStorePage.searchBook("Speaking JavaScript");
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        bookStorePage.updateRows("5");
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        bookStorePage.searchBook(properties.getProperty("bookStore.bookTitle"));
+        bookStorePage.updateRows(properties.getProperty("bookStore.rownumber"));
+        } catch (IllegalArgumentException e) {
+            System.out.println("Exception : " + e);
         }
     }
 }
