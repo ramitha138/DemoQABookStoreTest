@@ -30,18 +30,21 @@ public class BookStorePage {
     @FindBy(xpath = "//select[@aria-label='rows per page']")
     WebElement dropdown_rows;
 
+    // Constructor to initialize the WebDriver and WebDriverWait
     public BookStorePage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         PageFactory.initElements(driver, this);
     }
 
-    public void clickBookStoreManuButton() {
+    // Method to click the Book Store menu button
+    public void clickBookStoreMenuButton() {
         wait.until(ExpectedConditions.visibilityOf(Menu_BookStore));
         Menu_BookStore.click();
         Reporter.log("Book Store menu button clicked successfully", true);
     }
 
+    // Method to search for a book by its name
     public void searchBook(String bookName) {
 
         wait.until(ExpectedConditions.elementToBeClickable(textbox_search));
@@ -51,6 +54,7 @@ public class BookStorePage {
         Reporter.log("Search keword entered successfully", true);
     }
 
+    // Method to update the number of rows displayed in the table
     public void updateRows(String value) {
         wait.until(ExpectedConditions.visibilityOf(dropdown_rows));
         Select rowsDropdown = new Select(dropdown_rows);

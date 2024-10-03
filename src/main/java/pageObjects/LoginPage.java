@@ -25,22 +25,21 @@ public class LoginPage {
     @FindBy(id = "login")
     WebElement button_login;
 
+    // Constructor to initialize the WebDriver
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-
-/*    public String validateLoginPage(*//*String welcomeMessage*//*) {
-        return label_welcome.getText();
-     }*/
-
+    // Method to perform login using the provided username and password
     public void login(String username, String password) {
 
+        // Click the username input field and enter the username
         textbox_username.click();
         textbox_username.sendKeys(username);
         Reporter.log("Username entered successfully", true);
 
+        // Click the password input field and enter the password
         textbox_password.click();
         textbox_password.sendKeys(password);
         Reporter.log("Pasword entered successfully", true);
@@ -48,6 +47,7 @@ public class LoginPage {
         button_login.click();
     }
 
+    // Method to verify the login by returning the current URL
     public String verifyLogin() {
         return driver.getCurrentUrl();
     }

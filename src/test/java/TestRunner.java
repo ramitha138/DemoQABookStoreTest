@@ -9,11 +9,14 @@ import java.util.Properties;
 
 public class TestRunner extends BaseSetup {
 
+    // Instance of pages
     private LoginPage loginPage;
     private BookStorePage bookStorePage;
 
+    // Properties object to hold configuration
     private static Properties properties;
 
+    // Constructor to initialize properties
     public TestRunner() {
         ReadProperties readPropertyFile = new ReadProperties();
         try {
@@ -39,7 +42,7 @@ public class TestRunner extends BaseSetup {
 
         bookStorePage = new BookStorePage(driver);
 
-        bookStorePage.clickBookStoreManuButton();
+        bookStorePage.clickBookStoreMenuButton();
         bookStorePage.searchBook(properties.getProperty("bookStore.bookTitle"));
         bookStorePage.updateRows(properties.getProperty("bookStore.rownumber"));
     }
