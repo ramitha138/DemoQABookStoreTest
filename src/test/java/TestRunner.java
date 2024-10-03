@@ -12,7 +12,7 @@ public class TestRunner extends BaseSetup {
     private LoginPage loginPage;
     private BookStorePage bookStorePage;
 
-    static Properties properties;
+    private static Properties properties;
 
     public TestRunner() {
         ReadProperties readPropertyFile = new ReadProperties();
@@ -21,6 +21,7 @@ public class TestRunner extends BaseSetup {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load properties file", e);
         }
+        super();
     }
 
     @Test(priority = 1)
@@ -29,27 +30,17 @@ public class TestRunner extends BaseSetup {
         String username = properties.getProperty("login.username");
         String password = properties.getProperty("login.password");
 
-        try {
-            loginPage = new LoginPage(driver);
-            loginPage.login(username, password);
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Exception : " + e);
-        }
+        loginPage = new LoginPage(driver);
+        loginPage.login(username, password);
     }
 
     @Test(priority = 2)
     public void bookStorePage(){
-
-        try {
 
         bookStorePage = new BookStorePage(driver);
 
         bookStorePage.clickBookStoreManuButton();
         bookStorePage.searchBook(properties.getProperty("bookStore.bookTitle"));
         bookStorePage.updateRows(properties.getProperty("bookStore.rownumber"));
-        } catch (IllegalArgumentException e) {
-            System.out.println("Exception : " + e);
-        }
     }
 }
